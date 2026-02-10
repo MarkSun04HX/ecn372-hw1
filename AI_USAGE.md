@@ -56,3 +56,42 @@
 - **What I used:** Provided corrected `ggsave()` call with explicit filename parameter
 - **Verification:** Plot now saves successfully to `output/fig1_bubble_trends.png`
 
+## 2026-02-10 — Create Figure 2: Life expectancy trends by continent with IQR ribbon and dual trend lines
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Produce Figure 2 showing life expectancy over time within each continent with country-level IQR ribbon (25th–75th percentile), median line, and population-weighted mean line; save as PDF
+- **Output summary:** Created three code sections: (1) Setup: loaded packages and created OUTPUT_DIR; (2) Data prep: calculated median, Q1, Q3, and population-weighted mean of life expectancy by continent and year; (3) Figure creation: built ggplot with geom_ribbon for IQR, geom_line for median and weighted mean, faceted by continent, saved to `figure-2-ribbon-median-weighted.pdf`
+- **What I used:** dplyr for data aggregation, ggplot2 for visualization with ribbon, line, and facet layers
+- **Verification:** Figure 2 (p2) displays life expectancy trends with IQR shading and dual trend lines per continent
+
+## 2026-02-10 — Update Figure 2: Remove continent colors, apply blue median and orange dotted weighted mean lines
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Modify Figure 2 to remove color distinction by continent, use blue line for median, orange dotted line for population-weighted mean, and update subtitle to "Ribbon = country-level IQR (25th–75th percentile) each year"
+- **Output summary:** Removed `scale_fill_brewer()` and `scale_color_brewer()` to eliminate continent color coding; replaced with single gray fill for ribbon and manual color/linetype assignment: median = blue solid line, weighted mean = orange dashed line. Updated subtitle to match specification. Simplified legend by removing continent from aesthetics.
+- **What I used:** Removed color/fill scales, set fixed ribbon fill to gray, used `scale_color_manual()` with blue and orange, updated `scale_linetype_manual()` with solid and dashed
+- **Verification:** Figure 2 now displays uniform gray IQR ribbons across all facets with blue median and orange dotted weighted mean lines
+
+## 2026-02-10 — Final updates to Figure 2: Title, colors, dashes, data source attribution
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Update Figure 2 main title to "Life expectancy over time (within each continent)", change weighted mean line color to red, make dashes shorter, change reference label from "Weighted Mean" to "Population−weighted mean", and add "Data: gapminder package" in bottom right corner
+- **Output summary:** Updated `title` to "Life expectancy over time (within each continent)"; changed weighted mean line color from orange to red; modified linetype for dashed line to use shorter dashes; updated `scale_linetype_manual()` label from "Weighted Mean" to "Population−weighted mean"; added caption with data source attribution via `caption = "Data: gapminder package"` and positioned it to bottom right via theme settings
+- **What I used:** Modified labs(), color assignment, linetype specification, and theme(plot.caption) with hjust=1 for right alignment
+- **Verification:** Figure 2 displays correct title, red dashed population-weighted mean line, and data source attribution in bottom right corner
+
+## 2026-02-10 — Restructure and annotate setup script with clear comments
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Restructure the setup script (00_setup.R) with clear, readable annotations on each line; organize into logical sections with better readability and improved package management
+- **Output summary:** Reorganized setup script into logical sections: (1) Script header with documentation; (2) Package vector definition with descriptions; (3) Conditional package installation; (4) Package loading with inline comments for each library. Replaced simple `install.packages()` with conditional check using `requireNamespace()` to avoid reinstalling packages that already exist. Added comprehensive inline comments explaining the purpose of each package and operation flow.
+- **What I used:** Restructured code layout, added descriptive inline comments, implemented conditional package installation, organized into logical subsections with clear section headers
+- **Verification:** Setup script is now readable with clear annotations; packages only install if missing; logical flow from package definition to conditional installation to library loading
+
+## 2026-02-10 — Restructure and annotate data prep script (improved version) with comprehensive comments
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Restructure the 01_data_prep.R script with clear, readable annotations and improved organization
+- **Output summary:** Completely reorganized data prep script into logical sections: (1) Script header with detailed documentation; (2) Dependency sourcing with explanation; (3) Project paths configuration with inline comments; (4) Output directory setup with conditional creation; (5) Status logging; (6) Data filtering section with detailed comments on gapminder dataset. Added comprehensive inline comments explaining the purpose of dplyr pipes, filtering logic, and data validation. Improved readability with clear section headers and logical flow.
+- **What I used:** Restructured code layout, added descriptive inline comments, organized into logical subsections with clear section headers (SECTION 1-5), enhanced documentation of filtering operations and piping syntax
+- **Verification:** Data prep script is now highly readable with clear annotations; proper dependency management; logical flow from project setup through data filtering to validation
