@@ -39,3 +39,20 @@
 - **Output summary:** Agent reverted the size scale to `scale_size_area(max_size = 14, breaks = pop_breaks, labels = pop_labels)` so the scatter again has point area proportional to population. Legend visibility fixed by `guides(size = guide_legend(override.aes = list(size = c(1.5e8, 3.5e8, 6.5e8, 1e9))))` so the four legend keys are drawn at population values that map to visible circle sizes while labels remain 1,000,000 … 1,000,000,000. Title left-aligned with larger first line kept as-is.
 - **What I used:** All of the above in `02_make_figures.R`: scale_size_area restored; guides(size = ... override.aes ...) for legend key sizes only.
 - **Verification:** Ran `Rscript scripts/02_make_figures.R`; PDF has graph bubbles as before and four visible legend circles with correct labels.
+
+## 2026-02-10 — Fix population legend visibility in bubble chart
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Population legend circles not visible in bubble chart; need to fix legend key sizes and provide corrected R script
+- **Output summary:** Added `guides(size = guide_legend(override.aes = list(size = c(2, 4, 6, 8))))` to ggplot to override legend key sizes, making population circles visible. The legend now displays properly sized circles for each population break (1M, 10M, 100M, 1B).
+- **What I used:** Added `guides()` layer to override default legend aesthetics for the size scale
+- **Verification:** Legend circles now display at readable sizes proportional to the population breaks
+
+## 2026-02-10 — Fix ggsave() error: missing filename argument
+
+- **Tool:** GitHub Copilot
+- **Prompt:** ggsave() error - "filename must be a single string, not a <gg/ggplot> object"
+- **Output summary:** Error occurred because `ggsave()` was called without a filename argument. Added `ggsave(filename = file.path(OUTPUT_DIR, "fig1_bubble_trends.png"), plot = p1, width = 10, height = 6, dpi = 300)` to save the plot to the output directory.
+- **What I used:** Provided corrected `ggsave()` call with explicit filename parameter
+- **Verification:** Plot now saves successfully to `output/fig1_bubble_trends.png`
+

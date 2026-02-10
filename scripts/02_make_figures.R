@@ -1,14 +1,3 @@
-# 02_make_figures.R — Build figure outputs (run from project root)
-# Usage: Rscript scripts/02_make_figures.R
-
-# Ensure we're in project root when run via Rscript
-if (length(commandArgs(trailingOnly = TRUE)) > 0) {
-  script_dir <- dirname(sub("^--file=", "", commandArgs(trailingOnly = FALSE)[grep("^--file=", commandArgs(trailingOnly = FALSE))]))
-  if (length(script_dir) > 0 && script_dir != "") {
-    setwd(dirname(script_dir))
-  }
-}
-
 source("scripts/00_setup.R")
 source("scripts/01_data_prep.R")
 
@@ -33,8 +22,6 @@ p1 <- ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   # Point area = population; points colored by continent
   geom_point(aes(size = pop, fill = continent), alpha = 0.6, shape = 21, color = "white", stroke = 0.5) +
   scale_size_area(max_size = 14, name = "Population", breaks = pop_breaks, labels = pop_labels) +
-  # Legend keys: override sizes so the four circles are visible (scale still maps 1e6..1e9 to area on plot)
-  guides(size = guide_legend(override.aes = list(size = c(1.5e8, 3.5e8, 6.5e8, 1e9)))) +
   scale_fill_brewer(palette = "Set1", name = "Continent") +
   # Log scale for GDP per person; axis labels as dollars
   scale_x_log10(labels = label_dollar_log) +
@@ -43,6 +30,8 @@ p1 <- ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   # Within-continent trend lines (linear)
   geom_smooth(aes(group = continent, color = continent), method = "lm", se = FALSE, linewidth = 0.7) +
   scale_color_brewer(palette = "Set1", name = "Continent") +
+  # Override legend key sizes to make population circles visible
+  guides(size = guide_legend(override.aes = list(size = c(2, 4, 6, 8)))) +
   labs(
     x = "GDP per person (log scale)",
     y = "Life expectancy (years)",
@@ -59,12 +48,70 @@ p1 <- ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
     legend.title = element_text(size = rel(0.95))
   )
 
-out_path_1 <- file.path(OUTPUT_DIR, "figure-1-bubble-trends.pdf")
-ggsave(out_path_1, p1, width = 8, height = 5, device = "pdf")
-message("Saved: ", out_path_1)
+# Save figure 1
+ggsave(
+  filename = file.path(OUTPUT_DIR, "fig1_bubble_trends.pdf"),
+  plot = p1,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
 
-# Placeholder for second figure (add when you choose figure 2)
-# out_path_2 <- file.path(OUTPUT_DIR, "figure-2-....pdf")
-# ggsave(out_path_2, p2, width = 8, height = 5, device = "pdf")
+message("Figure 1 saved to ", file.path(OUTPUT_DIR, "fig1_bubble_trends.pdf"))
 
-message("Done. Figures written to ", OUTPUT_DIR, ".")
+ggsave(file.path(OUTPUT_DIR, "fig1_bubble_trends.pdf"), plot = p1, width = 8, height = 6)
+
+gapminder_by_continent_year <- gapminder %>%
+  group_by(continent, year) %>%
+  summarise(
+    # IQR: 25th and 75th percentiles
+    q1_lifeExp = quantile(lifeExp, probs = 0.25, na.rm = TRUE),
+    median_lifeExp = median(lifeExp, na.rm = TRUE),
+    q3_lifeExp = quantile(lifeExp, probs = 0.75, na.rm = TRUE),
+    # Population-weighted mean
+    weighted_mean_lifeExp = weighted.mean(lifeExp, w = pop, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+p2 <- ggplot(gapminder_by_continent_year, aes(x = year)) +
+  # Ribbon for IQR (25th–75th percentile)
+  geom_ribbon(aes(ymin = q1_lifeExp, ymax = q3_lifeExp), 
+              fill = "gray70", alpha = 0.4, color = NA) +
+  # Line for median (blue)
+  geom_line(aes(y = median_lifeExp, linetype = "Median"), 
+            color = "blue", linewidth = 0.8) +
+  # Line for population-weighted mean (red dashed)
+  geom_line(aes(y = weighted_mean_lifeExp, linetype = "Population-weighted mean"), 
+            color = "red", linewidth = 0.8) +
+  scale_linetype_manual(name = "Trend Line", 
+                        values = c("Median" = "solid", "Population-weighted mean" = "22")) +
+  facet_wrap(~continent, ncol = 2) +
+  labs(
+    x = "Year",
+    y = "Life expectancy (years)",
+    title = "Life expectancy over time (within each continent)",
+    subtitle = "Ribbon = country-level IQR (25th–75th percentile) each year",
+    caption = "Data: gapminder package"
+  ) +
+  theme_minimal(base_size = 9) +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0, size = rel(1.35)),
+    plot.subtitle = element_text(hjust = 0, size = rel(0.9)),
+    plot.caption = element_text(hjust = 1, size = rel(0.85), color = "gray50"),
+    axis.text = element_text(size = rel(0.85)),
+    legend.text = element_text(size = rel(0.85)),
+    legend.title = element_text(size = rel(0.95))
+  )
+
+# Save figure 2
+ggsave(
+  filename = file.path(OUTPUT_DIR, "figure-2-ribbon-median-weighted.pdf"),
+  plot = p2,
+  width = 12,
+  height = 8,
+  dpi = 300
+)
+
+message("Figure 2 saved to ", file.path(OUTPUT_DIR, "figure-2-ribbon-median-weighted.pdf"))
+ggsave(file.path(OUTPUT_DIR, "figure-2-ribbon-median-weighted.pdf"), plot = p2, width = 12, height = 8, dpi = 300)
