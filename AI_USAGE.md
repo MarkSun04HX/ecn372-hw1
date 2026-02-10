@@ -111,3 +111,24 @@
 - **Output summary:** Enhanced `01_data_prep.R` with comprehensive annotations covering file purpose and pipeline integration, dependency ordering and defensive sourcing behavior, explanation of why path/dir checks are duplicated (robustness when run standalone vs. pipelined), detailed rationale for the gapminder year-2007 filter, dataset structure documentation, and verification logging for debugging and testing.
 - **What I used:** Annotated the existing `01_data_prep.R` script with clear documentation, explanatory section headers, and robust inline comments without changing the underlying data logic or functionality.
 - **Key additions:** Contextual header on dependencies and execution order, explanation of defensive path/directory setup, detailed data filtering rationale with structure documentation, and guidance for manual interactive exploration of gapminder_2007.
+
+### 2026-02-10 — Figure 2: Annotated GDP vs Life Expectancy Code
+- **Tool**: Gemini 3 Pro
+- **Prompt**: "can you add detailed annotation to this code, you do not need to change any code: [code block]... also: as we talk please write AI_USAGE.md like..."
+- **Output summary**: Added detailed comments to the provided R/ggplot2 code explaining the function of specific geoms, scales, and theme elements without modifying the logic. Generated the requested documentation entry.
+- **What I used**: The annotated code block provided in the chat response.
+- **Verification**: Reviewed comments for accuracy against `ggplot2` documentation standards to ensure they correctly describe the behavior of parameters like `aes(group=1)`, `scale_size_continuous`, and `geom_smooth`.
+
+### 2026-02-10 — Code Fix: Variable Alignment and Syntax
+- **Tool**: Gemini 3 Pro
+- **Prompt**: "can you fix the code here: [code block]..."
+- **Output summary**: Identified and corrected a variable mismatch where the plot object was named `p` but saved as `p1`. Switched the plot definition to `p1`. Also removed a syntax error (trailing comma) in the final message and ensured the custom `label_dollar_log` function was actually utilized in the plot code.
+- **What I used**: The corrected code block provided in the chat response.
+- **Verification**: Visually verified that `ggsave(plot = p1)` matches `p1 <- ggplot(...)` and that the final `message()` call is syntactically closed.
+
+### 2026-02-10 — Error Fix: C Stack Usage & Circular Dependencies
+- **Tool**: Gemini 3 Pro
+- **Prompt**: "update the AI USAGE.md, and what does this mean: Error: C stack usage 7971648 is too close to the limit"
+- **Output summary**: Explained that "C stack usage" errors usually mean infinite recursion. Identified that the script was likely sourcing itself or a file that sources it back, creating an endless loop. Removed the recursive `source()` calls.
+- **What I used**: The explanation and troubleshooting steps provided in the chat response.
+- **Verification**: Verified that the explanation aligns with standard R error messages regarding recursion limits and stack overflow.
