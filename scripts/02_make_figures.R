@@ -71,7 +71,7 @@ p1 <- ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp)) +
   scale_color_brewer(palette = "Set1", name = "Continent") +
   
   # Override legend: Make population circles in legend visible
-  guides(size = guide_legend(override.aes = list(size = c(2, 4, 6, 8)))) +
+
   
   # Labels and titles
   labs(x = "GDP per person (log scale)",
