@@ -4,6 +4,7 @@ This repository replicates two figures from the gapminder dataset using R, ggplo
 
 ## Repo Structure
 
+- **`README.md`** - requirements and overall structure of the project
 - **`scripts/00_setup.R`** — Loads packages (tidyverse, gapminder, scales); creates output directory.
 - **`scripts/01_data_prep.R`** — Filters and aggregates gapminder data for figures (2007 snapshot, continent-year summaries).
 - **`scripts/02_make_figures.R`** — Entry point: sources setup and data prep, then generates two PDFs in `output/`.
