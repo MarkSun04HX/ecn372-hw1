@@ -95,3 +95,19 @@
 - **Output summary:** Completely reorganized data prep script into logical sections: (1) Script header with detailed documentation; (2) Dependency sourcing with explanation; (3) Project paths configuration with inline comments; (4) Output directory setup with conditional creation; (5) Status logging; (6) Data filtering section with detailed comments on gapminder dataset. Added comprehensive inline comments explaining the purpose of dplyr pipes, filtering logic, and data validation. Improved readability with clear section headers and logical flow.
 - **What I used:** Restructured code layout, added descriptive inline comments, organized into logical subsections with clear section headers (SECTION 1-5), enhanced documentation of filtering operations and piping syntax
 - **Verification:** Data prep script is now highly readable with clear annotations; proper dependency management; logical flow from project setup through data filtering to validation
+
+## 2026-02-10 — Annotation and Documentation of 00_setup.R
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Add detailed annotation and notes to 00_setup.R and record interaction in AI_USAGE.md
+- **Output summary:** Enhanced `00_setup.R` with comprehensive inline comments explaining file purpose and usage context, package dependencies and their roles, logic flow for PROJECT_ROOT detection across different R execution contexts (RStudio, Rscript, interactive), rationale for rstudioapi::getActiveProject() in interactive RStudio sessions, fallback behavior and safety checks, OUTPUT_DIR creation logic with recursive directory creation, and guidance for downstream scripts.
+- **What I used:** Annotated the existing `00_setup.R` script with clear section headers, inline explanations, and contextual notes without changing any functionality.
+- **Key additions:** Top-level file header with purpose/dependencies/usage, detailed comments on path resolution logic, explanation of project-relative paths for reproducibility, and navigation guidance for next steps.
+
+## 2026-02-10 — Annotation and Documentation of 01_data_prep.R
+
+- **Tool:** GitHub Copilot
+- **Prompt:** Add detailed annotation and notes to 01_data_prep.R and record interaction in AI_USAGE.md
+- **Output summary:** Enhanced `01_data_prep.R` with comprehensive annotations covering file purpose and pipeline integration, dependency ordering and defensive sourcing behavior, explanation of why path/dir checks are duplicated (robustness when run standalone vs. pipelined), detailed rationale for the gapminder year-2007 filter, dataset structure documentation, and verification logging for debugging and testing.
+- **What I used:** Annotated the existing `01_data_prep.R` script with clear documentation, explanatory section headers, and robust inline comments without changing the underlying data logic or functionality.
+- **Key additions:** Contextual header on dependencies and execution order, explanation of defensive path/directory setup, detailed data filtering rationale with structure documentation, and guidance for manual interactive exploration of gapminder_2007.
